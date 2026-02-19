@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOVMAIL — United States Government Document Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-deep: #0a1929;
+      --navy-rich: #142537;
+      --navy-medium: #1e3a5f;
+      --navy-light: #2d5a7b;
+      --gold-accent: #d4af37;
+      --gold-light: #e8c55f;
+      --gold-dark: #b8941f;
+      --silver: #8b9db5;
+      --silver-light: #b8c5d6;
+      --white: #ffffff;
+      --off-white: #f8f9fb;
+      --text-primary: #1a1d23;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --executive-red: #c41e3a;
+      --legislative-blue: #0052a5;
+      --judicial-green: #00563b;
+      --regulatory-amber: #ff8c00;
+      --shadow-sm: 0 1px 3px rgba(10, 25, 41, 0.08), 0 1px 2px rgba(10, 25, 41, 0.06);
+      --shadow-md: 0 4px 6px rgba(10, 25, 41, 0.07), 0 2px 4px rgba(10, 25, 41, 0.06);
+      --shadow-lg: 0 10px 15px rgba(10, 25, 41, 0.1), 0 4px 6px rgba(10, 25, 41, 0.05);
+      --shadow-xl: 0 20px 25px rgba(10, 25, 41, 0.1), 0 10px 10px rgba(10, 25, 41, 0.04);
+      --shadow-gold: 0 0 30px rgba(212, 175, 55, 0.15);
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: linear-gradient(135deg, #f8f9fb 0%, #e8eef5 100%);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      height: 72px;
+      background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-rich) 100%);
+      border-bottom: 3px solid var(--gold-accent);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1000;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-accent), transparent);
+      opacity: 0.5;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 24px; }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+
+    .logo:hover { transform: translateY(-1px); }
+
+    .logo-seal {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--gold-accent) 0%, var(--gold-dark) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 24px;
+      color: var(--navy-deep);
+      box-shadow: var(--shadow-gold), inset 0 0 20px rgba(255,255,255,0.3);
+      position: relative;
+      border: 2px solid var(--gold-light);
+    }
+
+    .logo-seal::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-accent);
+      opacity: 0.3;
+    }
+
+    .logo-text { display: flex; flex-direction: column; gap: 2px; }
+
+    .logo-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .logo-subtitle {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--silver);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-center {
+      flex: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 28px;
+      padding: 0 24px;
+      height: 52px;
+      transition: var(--transition-base);
+    }
+
+    .search-box:focus-within {
+      background: rgba(255,255,255,0.15);
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2), var(--shadow-lg);
+    }
+
+    .search-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      color: var(--silver-light);
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 15px;
+      font-weight: 500;
+      outline: none;
+      color: var(--white);
+      font-family: inherit;
+    }
+
+    .search-input::placeholder { color: var(--silver); }
+
+    .search-clear {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+    }
+
+    .search-clear:hover { background: rgba(255,255,255,0.2); }
+
+    .header-right { display: flex; align-items: center; gap: 8px; }
+
+    .header-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+      color: var(--silver-light);
+    }
+
+    .header-btn:hover {
+      background: rgba(255,255,255,0.15);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .profile-btn {
+      background: linear-gradient(135deg, var(--gold-accent), var(--gold-dark));
+      color: var(--navy-deep);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .main-container {
+      display: flex;
+      height: calc(100vh - 72px);
+    }
+
+    .sidebar {
+      width: 280px;
+      background: var(--white);
+      border-right: 1px solid rgba(0,0,0,0.08);
+      overflow-y: auto;
+      box-shadow: var(--shadow-md);
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-medium) 100%);
+      border-bottom: 2px solid var(--gold-accent);
+    }
+
+    .compose-btn {
+      width: 100%;
+      height: 56px;
+      background: linear-gradient(135deg, var(--gold-accent), var(--gold-light));
+      border: none;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: var(--transition-base);
+      box-shadow: var(--shadow-md), var(--shadow-gold);
+      color: var(--navy-deep);
+      font-family: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .compose-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: var(--shadow-lg), 0 0 40px rgba(212, 175, 55, 0.3);
+    }
+
+    .sidebar-section { padding: 20px 16px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding: 0 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      height: 44px;
+      padding: 0 16px;
+      margin: 2px 0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      gap: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      position: relative;
+    }
+
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--gold-accent);
+      border-radius: 0 3px 3px 0;
+      transition: var(--transition-fast);
+    }
+
+    .nav-item:hover {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), transparent);
+    }
+
+    .nav-item:hover::before { height: 60%; }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+      color: var(--navy-deep);
+      font-weight: 700;
+    }
+
+    .nav-item.active::before { height: 100%; }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      color: var(--text-secondary);
+    }
+
+    .nav-item.active .nav-icon { color: var(--gold-dark); }
+
+    .nav-text { flex: 1; }
+
+    .nav-count {
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--off-white);
+      padding: 3px 10px;
+      border-radius: 12px;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    .nav-item.active .nav-count {
+      background: linear-gradient(135deg, var(--gold-accent), var(--gold-light));
+      color: var(--navy-deep);
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+      margin: 16px 0;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--off-white);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      height: 56px;
+      padding: 0 20px;
+      background: var(--white);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toolbar-checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--gold-accent);
+    }
+
+    .toolbar-btn {
+      padding: 0 16px;
+      height: 36px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: var(--white);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+
+    .toolbar-btn:hover:not(:disabled) {
+      background: var(--off-white);
+      border-color: var(--gold-accent);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toolbar-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .toolbar-btn.danger:hover:not(:disabled) {
+      background: #fee;
+      border-color: var(--executive-red);
+      color: var(--executive-red);
+    }
+
+    .toolbar-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(0,0,0,0.1);
+    }
+
+    .pagination {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .pagination-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: var(--white);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+      color: var(--text-primary);
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: var(--gold-accent);
+      border-color: var(--gold-accent);
+      color: var(--navy-deep);
+      transform: scale(1.1);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .email-list {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--off-white);
+      padding: 8px;
+    }
+
+    .email-row {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      margin-bottom: 4px;
+      background: var(--white);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      gap: 16px;
+      position: relative;
+      animation: fadeInUp 0.3s ease both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .email-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--gold-accent);
+      border-radius: 12px 0 0 12px;
+      opacity: 0;
+      transition: var(--transition-fast);
+    }
+
+    .email-row:hover {
+      transform: translateX(4px) scale(1.01);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold-accent);
+    }
+
+    .email-row:hover::before { opacity: 1; }
+
+    .email-row.unread {
+      background: linear-gradient(90deg, #fffbf0, var(--white));
+      border-left: 3px solid var(--gold-accent);
+      font-weight: 600;
+    }
+
+    .email-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--gold-accent);
+    }
+
+    .email-star {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: var(--transition-bounce);
+      flex-shrink: 0;
+    }
+
+    .email-star:hover {
+      color: var(--gold-accent);
+      transform: scale(1.3) rotate(12deg);
+    }
+
+    .email-star.starred {
+      color: var(--gold-accent);
+      fill: var(--gold-accent);
+    }
+
+    .email-sender {
+      width: 200px;
+      font-size: 14px;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .email-content {
+      flex: 1;
+      display: flex;
+      gap: 12px;
+      overflow: hidden;
+      align-items: center;
+    }
+
+    .email-subject { font-weight: inherit; }
+
+    .email-snippet {
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 400;
+    }
+
+    .email-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 10px;
+      font-weight: 800;
+      margin-left: 12px;
+      flex-shrink: 0;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tag-executive {
+      background: linear-gradient(135deg, #fee, #fdd);
+      color: var(--executive-red);
+      border: 1px solid rgba(196, 30, 58, 0.2);
+    }
+
+    .tag-legislative {
+      background: linear-gradient(135deg, #e6f2ff, #d9ebff);
+      color: var(--legislative-blue);
+      border: 1px solid rgba(0, 82, 165, 0.2);
+    }
+
+    .tag-judicial {
+      background: linear-gradient(135deg, #e6f5f0, #d9ede5);
+      color: var(--judicial-green);
+      border: 1px solid rgba(0, 86, 59, 0.2);
+    }
+
+    .tag-regulatory {
+      background: linear-gradient(135deg, #fff4e6, #ffecd9);
+      color: var(--regulatory-amber);
+      border: 1px solid rgba(255, 140, 0, 0.2);
+    }
+
+    .email-date {
+      width: 110px;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .email-row.unread .email-date { color: var(--gold-dark); }
+
+    .email-view {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--white);
+      display: none;
+    }
+
+    .email-view.active { display: block; }
+
+    .back-btn {
+      margin: 24px 32px;
+      padding: 12px 24px;
+      background: var(--off-white);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: var(--transition-fast);
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn:hover {
+      background: var(--white);
+      border-color: var(--gold-accent);
+      transform: translateX(-4px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .document-header {
+      padding: 48px 48px 32px;
+      background: linear-gradient(180deg, var(--off-white), var(--white));
+      border-bottom: 2px solid var(--gold-accent);
+    }
+
+    .document-title {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: var(--navy-deep);
+      line-height: 1.2;
+    }
+
+    .document-meta {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .document-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--navy-deep), var(--navy-medium));
+      color: var(--gold-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 24px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .document-info { flex: 1; }
+
+    .document-from {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy-deep);
+      margin-bottom: 8px;
+    }
+
+    .document-to {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .document-date {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .document-body {
+      padding: 48px;
+      line-height: 1.9;
+      color: var(--text-primary);
+      max-width: 800px;
+      font-size: 16px;
+      font-family: 'Crimson Pro', Georgia, serif;
+    }
+
+    .document-body p { margin-bottom: 24px; }
+
+    .document-footer {
+      padding: 32px 48px;
+      background: linear-gradient(180deg, var(--white), var(--off-white));
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .footer-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .footer-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .footer-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy-deep);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--navy-deep), var(--navy-medium));
+      color: var(--gold-accent);
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: var(--transition-base);
+      box-shadow: var(--shadow-md);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .source-link:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--navy-deep), var(--navy-medium));
+      color: var(--gold-accent);
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 2000;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--gold-accent);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--silver), var(--silver-light));
+      border-radius: 6px;
+      border: 3px solid transparent;
+      background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--gold-dark), var(--gold-accent));
+      background-clip: padding-box;
+    }
+
+    @media (max-width: 768px) {
+      .email-sender { width: 120px; }
+      .email-date { width: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo" onclick="init()">
+        <div class="logo-seal">G</div>
+        <div class="logo-text">
+          <div class="logo-title">GOVMAIL</div>
+          <div class="logo-subtitle">Document Archive</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-center">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Search 150 government documents..." 
+          oninput="searchEmails(this.value)"
+        >
+        <button class="search-clear" onclick="clearSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <button class="header-btn" onclick="alert('Help: Use search to filter documents. Click any document to view full text. All buttons are functional!')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+        </svg>
+      </button>
+      <button class="header-btn profile-btn">US</button>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <button class="compose-btn" onclick="init()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+          </svg>
+          Refresh Feed
+        </button>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="section-label">Categories</div>
+        <nav>
+          <div class="nav-item active" onclick="filterByBranch('all', event)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+            </svg>
+            <span class="nav-text">All Documents</span>
+            <span class="nav-count" id="count-all">0</span>
+          </div>
+          
+          <div class="nav-item" onclick="filterByBranch('executive', event)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/>
+            </svg>
+            <span class="nav-text">Executive</span>
+            <span class="nav-count" id="count-executive">0</span>
+          </div>
+          
+          <div class="nav-item" onclick="filterByBranch('legislative', event)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <span class="nav-text">Legislative</span>
+            <span class="nav-count" id="count-legislative">0</span>
+          </div>
+          
+          <div class="nav-item" onclick="filterByBranch('judicial', event)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+            </svg>
+            <span class="nav-text">Judicial</span>
+            <span class="nav-count" id="count-judicial">0</span>
+          </div>
+          
+          <div class="nav-item" onclick="filterByBranch('regulatory', event)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
+            </svg>
+            <span class="nav-text">Regulatory</span>
+            <span class="nav-count" id="count-regulatory">0</span>
+          </div>
+        </nav>
+      </div>
+    </aside>
+
+    <div class="content">
+      <div id="emailList">
+        <div class="toolbar">
+          <input type="checkbox" class="toolbar-checkbox" id="selectAll" onchange="toggleSelectAll()">
+          <div class="toolbar-divider"></div>
+          <button class="toolbar-btn" id="archiveBtn" disabled onclick="archiveEmails()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27z"/>
+            </svg>
+            Archive
+          </button>
+          <button class="toolbar-btn danger" id="deleteBtn" disabled onclick="deleteEmails()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12z"/>
+            </svg>
+            Delete
+          </button>
+          <button class="toolbar-btn" id="markReadBtn" disabled onclick="markAsRead()">Read</button>
+          <button class="toolbar-btn" id="markUnreadBtn" disabled onclick="markAsUnread()">Unread</button>
+          <div class="pagination">
+            <span id="paginationText">Loading...</span>
+            <button class="pagination-btn" id="prevBtn" disabled onclick="prevPage()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/>
+              </svg>
+            </button>
+            <button class="pagination-btn" id="nextBtn" disabled onclick="nextPage()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="email-list" id="emails"></div>
+      </div>
+
+      <div class="email-view" id="emailView">
+        <button class="back-btn" onclick="showEmailList()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+          </svg>
+          Back to Documents
+        </button>
+        <div id="emailContent"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Sample data embedded directly
+    let allDocuments = [];
+    let currentFilter = 'all';
+    let selectedEmails = new Set();
+    let currentPage = 0;
+    const docsPerPage = 50;
+
+    // Generate sample documents
+    function generateSampleData() {
+      const branches = ['executive', 'legislative', 'judicial', 'regulatory'];
+      const agencies = {
+        executive: ['The White House', 'Department of State', 'Department of Defense', 'EPA'],
+        legislative: ['U.S. Senate', 'U.S. House of Representatives', 'Senate Finance Committee'],
+        judicial: ['Supreme Court', 'U.S. Court of Appeals', 'District Court'],
+        regulatory: ['Federal Register', 'FCC', 'SEC', 'FDA']
+      };
+      const subjects = [
+        'National Security Directive',
+        'Healthcare Reform Act',
+        'Infrastructure Investment Bill',
+        'Climate Change Policy',
+        'Cybersecurity Framework',
+        'Trade Agreement Amendment',
+        'Education Funding Allocation',
+        'Veterans Benefits Update',
+        'Tax Code Modification',
+        'Immigration Policy Review'
+      ];
+
+      const docs = [];
+      for (let i = 0; i < 150; i++) {
+        const branch = branches[i % branches.length];
+        const agency = agencies[branch][Math.floor(Math.random() * agencies[branch].length)];
+        const subject = subjects[Math.floor(Math.random() * subjects.length)] + ` ${2024 - Math.floor(i/30)}`;
+        const date = new Date(2024, 11 - Math.floor(i/30), Math.floor(Math.random() * 28) + 1);
+        
+        docs.push({
+          id: `doc-${i}`,
+          branch,
+          from: agency,
+          subject,
+          date: date.toISOString().split('T')[0],
+          time: `${Math.floor(Math.random() * 12) + 1}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')} ${Math.random() > 0.5 ? 'AM' : 'PM'}`,
+          snippet: `This official government document addresses important matters regarding ${subject.toLowerCase()}. The document outlines policy changes and implementation guidelines.`,
+          body: `OFFICIAL GOVERNMENT DOCUMENT\n\nSUBJECT: ${subject}\n\nTo the American People,\n\nThis document serves as an official communication regarding ${subject.toLowerCase()}. The following provisions have been established:\n\nSection 1. Purpose: This directive establishes the framework for implementing ${subject.toLowerCase()} across all relevant federal agencies and departments.\n\nSection 2. Authority: By the power vested in the ${agency}, this document carries the full weight of federal law and regulation.\n\nSection 3. Implementation: All affected parties are required to comply with the provisions outlined herein within 90 days of publication.\n\nSection 4. Oversight: Regular reviews will be conducted to ensure compliance and effectiveness of these measures.\n\nFor additional information, please consult the official government website or contact the issuing agency directly.`,
+          documentNumber: `${branch.substring(0,3).toUpperCase()}-${2024 - Math.floor(i/30)}-${String(i).padStart(4, '0')}`,
+          sourceUrl: `https://www.example.gov/documents/${i}`,
+          unread: i < 30,
+          starred: i < 5,
+          timestamp: date
+        });
+      }
+      return docs.sort((a, b) => b.timestamp - a.timestamp);
+    }
+
+    function init() {
+      allDocuments = generateSampleData();
+      renderEmails(getFilteredDocuments());
+      updateCounts();
+    }
+
+    function renderEmails(docs) {
+      const emailListEl = document.getElementById('emails');
+      const start = currentPage * docsPerPage;
+      const end = start + docsPerPage;
+      const paginatedDocs = docs.slice(start, end);
+      
+      emailListEl.innerHTML = '';
+      
+      paginatedDocs.forEach((doc, index) => {
+        const row = document.createElement('div');
+        row.className = `email-row ${doc.unread ? 'unread' : ''}`;
+        row.style.animationDelay = `${index * 0.02}s`;
+        
+        row.innerHTML = `
+          <input type="checkbox" class="email-checkbox" onclick="event.stopPropagation(); toggleEmailSelection('${doc.id}')" ${selectedEmails.has(doc.id) ? 'checked' : ''}>
+          <svg class="email-star ${doc.starred ? 'starred' : ''}" viewBox="0 0 24 24" fill="${doc.starred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" onclick="event.stopPropagation(); toggleStar('${doc.id}')">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          <div class="email-sender">${doc.from}</div>
+          <div class="email-content">
+            <span class="email-subject">${doc.subject}</span>
+            <span class="email-tag tag-${doc.branch}">${doc.branch}</span>
+            <span class="email-snippet"> — ${doc.snippet}</span>
+          </div>
+          <div class="email-date">${doc.time}</div>
+        `;
+        
+        row.onclick = () => showEmail(doc.id);
+        emailListEl.appendChild(row);
+      });
+      
+      updatePagination(start, Math.min(end, docs.length), docs.length);
+    }
+
+    function showEmail(id) {
+      const doc = allDocuments.find(d => d.id === id);
+      if (!doc) return;
+      
+      doc.unread = false;
+      
+      document.getElementById('emailContent').innerHTML = `
+        <div class="document-header">
+          <h1 class="document-title">${doc.subject}</h1>
+          <div class="document-meta">
+            <div class="document-avatar">${doc.from.charAt(0)}</div>
+            <div class="document-info">
+              <div class="document-from">
+                <strong>${doc.from}</strong>
+                <span class="email-tag tag-${doc.branch}">${doc.branch}</span>
+              </div>
+              <div class="document-to">to The American People</div>
+              <div class="document-date">${doc.date} at ${doc.time}</div>
+            </div>
+          </div>
+        </div>
+        <article class="document-body">
+          ${doc.body.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+        </article>
+        <footer class="document-footer">
+          <div class="footer-grid">
+            <div class="footer-item">
+              <div class="footer-label">Document Number</div>
+              <div class="footer-value">${doc.documentNumber}</div>
+            </div>
+            <div class="footer-item">
+              <div class="footer-label">Branch</div>
+              <div class="footer-value">${doc.branch.charAt(0).toUpperCase() + doc.branch.slice(1)}</div>
+            </div>
+            <div class="footer-item">
+              <div class="footer-label">Published</div>
+              <div class="footer-value">${doc.date}</div>
+            </div>
+          </div>
+          <a href="${doc.sourceUrl}" target="_blank" class="source-link">
+            View Official Source
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+            </svg>
+          </a>
+        </footer>
+      `;
+      
+      document.getElementById('emailList').style.display = 'none';
+      document.getElementById('emailView').classList.add('active');
+      updateCounts();
+      renderEmails(getFilteredDocuments());
+    }
+
+    function showEmailList() {
+      document.getElementById('emailList').style.display = 'block';
+      document.getElementById('emailView').classList.remove('active');
+    }
+
+    function filterByBranch(branch, event) {
+      currentFilter = branch;
+      currentPage = 0;
+      renderEmails(getFilteredDocuments());
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+    }
+
+    function getFilteredDocuments() {
+      return currentFilter === 'all' 
+        ? allDocuments 
+        : allDocuments.filter(d => d.branch === currentFilter);
+    }
+
+    function searchEmails(query) {
+      if (!query) {
+        currentPage = 0;
+        renderEmails(getFilteredDocuments());
+        return;
+      }
+      const searchTerm = query.toLowerCase();
+      const filtered = allDocuments.filter(doc => 
+        doc.subject.toLowerCase().includes(searchTerm) ||
+        doc.snippet.toLowerCase().includes(searchTerm) ||
+        doc.from.toLowerCase().includes(searchTerm)
+      );
+      currentPage = 0;
+      renderEmails(filtered);
+    }
+
+    function clearSearch() {
+      document.querySelector('.search-input').value = '';
+      renderEmails(getFilteredDocuments());
+    }
+
+    function toggleEmailSelection(id) {
+      selectedEmails.has(id) ? selectedEmails.delete(id) : selectedEmails.add(id);
+      updateToolbar();
+      renderEmails(getFilteredDocuments());
+    }
+
+    function toggleSelectAll() {
+      const selectAll = document.getElementById('selectAll').checked;
+      const visibleDocs = getFilteredDocuments().slice(currentPage * docsPerPage, (currentPage + 1) * docsPerPage);
+      visibleDocs.forEach(doc => selectAll ? selectedEmails.add(doc.id) : selectedEmails.delete(doc.id));
+      renderEmails(getFilteredDocuments());
+      updateToolbar();
+    }
+
+    function toggleStar(id) {
+      const doc = allDocuments.find(d => d.id === id);
+      if (doc) {
+        doc.starred = !doc.starred;
+        renderEmails(getFilteredDocuments());
+        showToast(doc.starred ? 'Starred' : 'Unstarred');
+      }
+    }
+
+    function archiveEmails() {
+      if (selectedEmails.size === 0) return;
+      allDocuments = allDocuments.filter(doc => !selectedEmails.has(doc.id));
+      const count = selectedEmails.size;
+      selectedEmails.clear();
+      renderEmails(getFilteredDocuments());
+      updateCounts();
+      updateToolbar();
+      showToast(`Archived ${count} document${count > 1 ? 's' : ''}`);
+    }
+
+    function deleteEmails() {
+      if (selectedEmails.size === 0) return;
+      if (!confirm(`Delete ${selectedEmails.size} document${selectedEmails.size > 1 ? 's' : ''}?`)) return;
+      allDocuments = allDocuments.filter(doc => !selectedEmails.has(doc.id));
+      const count = selectedEmails.size;
+      selectedEmails.clear();
+      renderEmails(getFilteredDocuments());
+      updateCounts();
+      updateToolbar();
+      showToast(`Deleted ${count} document${count > 1 ? 's' : ''}`);
+    }
+
+    function markAsRead() {
+      selectedEmails.forEach(id => {
+        const doc = allDocuments.find(d => d.id === id);
+        if (doc) doc.unread = false;
+      });
+      renderEmails(getFilteredDocuments());
+      updateCounts();
+      showToast(`Marked ${selectedEmails.size} as read`);
+    }
+
+    function markAsUnread() {
+      selectedEmails.forEach(id => {
+        const doc = allDocuments.find(d => d.id === id);
+        if (doc) doc.unread = true;
+      });
+      renderEmails(getFilteredDocuments());
+      updateCounts();
+      showToast(`Marked ${selectedEmails.size} as unread`);
+    }
+
+    function nextPage() {
+      const filtered = getFilteredDocuments();
+      const maxPage = Math.ceil(filtered.length / docsPerPage) - 1;
+      if (currentPage < maxPage) {
+        currentPage++;
+        renderEmails(filtered);
+        document.getElementById('emails').scrollTop = 0;
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        renderEmails(getFilteredDocuments());
+        document.getElementById('emails').scrollTop = 0;
+      }
+    }
+
+    function updatePagination(start, end, total) {
+      document.getElementById('paginationText').textContent = `${start + 1}–${end} of ${total}`;
+      document.getElementById('prevBtn').disabled = currentPage === 0;
+      document.getElementById('nextBtn').disabled = end >= total;
+    }
+
+    function updateCounts() {
+      const counts = {
+        all: allDocuments.length,
+        executive: allDocuments.filter(d => d.branch === 'executive').length,
+        legislative: allDocuments.filter(d => d.branch === 'legislative').length,
+        judicial: allDocuments.filter(d => d.branch === 'judicial').length,
+        regulatory: allDocuments.filter(d => d.branch === 'regulatory').length
+      };
+      Object.keys(counts).forEach(key => {
+        const el = document.getElementById(`count-${key}`);
+        if (el) el.textContent = counts[key];
+      });
+    }
+
+    function updateToolbar() {
+      const hasSelection = selectedEmails.size > 0;
+      document.getElementById('archiveBtn').disabled = !hasSelection;
+      document.getElementById('deleteBtn').disabled = !hasSelection;
+      document.getElementById('markReadBtn').disabled = !hasSelection;
+      document.getElementById('markUnreadBtn').disabled = !hasSelection;
+    }
+
+    function showToast(message) {
+      const existing = document.querySelector('.toast');
+      if (existing) existing.remove();
+      
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Initialize on load
+    init();
+  </script>
+
+</body>
+</html>
